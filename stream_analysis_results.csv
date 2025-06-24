@@ -1,7 +1,0 @@
-TrackID,Gender,Age,Race,Behavior,DetectedObjects
-2,F,20-29,Middle Eastern,stay,person
-3,F,20-29,East Asian,stay,"tie, umbrella"
-1,F,20-29,Middle Eastern,stay,"person, cell phone"
-13,F,20-29,White,stay,person
-18,F,20-29,East Asian,stay,person
-22,F,20-29,White,stay,"person, apple"
