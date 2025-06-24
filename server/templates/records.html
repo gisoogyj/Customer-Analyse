@@ -1,0 +1,50 @@
+<!-- templates/records.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>rocords</title>
+  <script>
+    async function loadRecords() {
+      const res = await fetch('/records');
+      const data = await res.json();
+
+      const tableBody = document.getElementById('record-body');
+      tableBody.innerHTML = "";
+
+      data.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${row.track_id}</td>
+          <td>${row.gender}</td>
+          <td>${row.age}</td>
+          <td>${row.race}</td>
+          <td>${row.behavior}</td>
+          <td>${row.objects}</td>
+          <td>${row.timestamp}</td>
+        `;
+        tableBody.appendChild(tr);
+      });
+    }
+
+    window.onload = loadRecords;
+  </script>
+</head>
+<body>
+  <h2>records</h2>
+  <table border="1" cellpadding="5">
+    <thead>
+      <tr>
+        <th>Track ID</th>
+        <th>Gender</th>
+        <th>Age</th>
+        <th>Race</th>
+        <th>Behavior</th>
+        <th>Objects</th>
+        <th>Timestamp</th>
+      </tr>
+    </thead>
+    <tbody id="record-body"></tbody>
+  </table>
+</body>
+</html>
