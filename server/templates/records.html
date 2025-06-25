@@ -1,0 +1,121 @@
+<!-- templates/records.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Analytics Records</title>
+  <style>
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 40px;
+    }
+    .table-section {
+      flex: 1;
+      max-width: 48%;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #999;
+      padding: 6px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Analytics Dashboard</h1>
+  <div class="container">
+    <!-- 行为分析 -->
+    <div class="table-section">
+      <h2>Behavior Records</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Track ID</th>
+            <th>Gender</th>
+            <th>Age</th>
+            <th>Race</th>
+            <th>Behavior</th>
+            <th>Objects</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody id="behavior-body"></tbody>
+      </table>
+    </div>
+
+    <!-- 人群统计 -->
+    <div class="table-section">
+      <h2>Crowd Statistics</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Time Range</th>
+            <th>Total</th>
+            <th>Male</th>
+            <th>Female</th>
+            <th>Age Dist.</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody id="crowd-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    async function loadBehaviorRecords() {
+      const res = await fetch('/records');
+      const data = await res.json();
+      const tbody = document.getElementById('behavior-body');
+      tbody.innerHTML = "";
+      data.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${row.track_id}</td>
+          <td>${row.gender}</td>
+          <td>${row.age}</td>
+          <td>${row.race}</td>
+          <td>${row.behavior}</td>
+          <td>${row.objects}</td>
+          <td>${row.timestamp}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function loadCrowdStats() {
+      const res = await fetch('/crowd_stats_records');
+      const data = await res.json();
+      const tbody = document.getElementById('crowd-body');
+      tbody.innerHTML = "";
+      data.forEach(row => {
+        const ageDist = `
+          0-2:${row.age_0_2}, 3-9:${row.age_3_9}, 10-19:${row.age_10_19},<br>
+          20-29:${row.age_20_29}, 30-39:${row.age_30_39}, 40-49:${row.age_40_49},<br>
+          50-59:${row.age_50_59}, 60-69:${row.age_60_69}, 70+:${row.age_70_plus}
+        `;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${row.time_range}</td>
+          <td>${row.total}</td>
+          <td>${row.male}</td>
+          <td>${row.female}</td>
+          <td>${ageDist}</td>
+          <td>${row.timestamp}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    window.onload = () => {
+      loadBehaviorRecords();
+      loadCrowdStats();
+    }
+  </script>
+</body>
+</html>
